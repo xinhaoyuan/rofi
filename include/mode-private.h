@@ -146,6 +146,13 @@ typedef char *(*_mode_preprocess_input)(Mode *sw, const char *input);
 /**
  * @param sw The #Mode pointer
  *
+ * Callback after filtering the entries.
+ */
+typedef void (*_mode_post_switch)(Mode *sw);
+
+/**
+ * @param sw The #Mode pointer
+ *
  * Message to show in the message bar.
  *
  * @returns the (valid pango markup) message to display.
@@ -186,6 +193,8 @@ struct rofi_mode {
   _mode_get_completion _get_completion;
 
   _mode_preprocess_input _preprocess_input;
+
+  _mode_post_switch _post_switch;
 
   _mode_get_message _get_message;
 

@@ -66,6 +66,7 @@ typedef struct {
   char *message;
   char *prompt;
   char *data;
+  unsigned int selected;
   gboolean do_markup;
   char delim;
   /** no custom */
@@ -138,6 +139,8 @@ static void parse_header_entry(Mode *sw, char *line, ssize_t length) {
     } else if (strcasecmp(line, "data") == 0) {
       g_free(pd->data);
       pd->data = g_strdup(value);
+    } else if (strcasecmp(line, "selected") == 0) {
+      pd->selected = strtoul(value, NULL, 10);
     }
   }
 }
@@ -366,6 +369,13 @@ static inline unsigned int get_index(unsigned int length, int index) {
   // Out of range.
   return UINT_MAX;
 }
+static void _post_switch(Mode *sw) {
+  ScriptModePrivateData *pd = sw->private_data;
+  RofiViewState *state = rofi_view_get_active();
+  if (pd->selected != UINT32_MAX && state != NULL) {
+    rofi_view_set_selected_line(state, pd->selected);
+  }
+}
 static char *_get_display_value(const Mode *sw, unsigned int selected_line,
                                 G_GNUC_UNUSED int *state,
                                 G_GNUC_UNUSED GList **list, int get_entry) {
@@ -459,6 +469,7 @@ Mode *script_mode_parse_setup(const char *str) {
     sw->_get_message = script_get_message;
     sw->_get_icon = script_get_icon;
     sw->_get_completion = NULL, sw->_preprocess_input = NULL,
+    sw->_post_switch = _post_switch,
     sw->_get_display_value = _get_display_value;
 
     return sw;

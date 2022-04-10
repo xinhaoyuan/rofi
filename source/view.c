@@ -2061,6 +2061,9 @@ RofiViewState *rofi_view_create(Mode *sw, const char *input,
 
   state->quit = FALSE;
   rofi_view_refilter(state);
+  if (state->sw) {
+    mode_post_switch(state->sw);
+  }
   rofi_view_update(state, TRUE);
   xcb_map_window(xcb->connection, CacheState.main_window);
   widget_queue_redraw(WIDGET(state->main_window));
@@ -2257,6 +2260,9 @@ void rofi_view_switch_mode(RofiViewState *state, Mode *mode) {
   state->reload = TRUE;
   state->refilter = TRUE;
   rofi_view_refilter(state);
+  if (state->sw) {
+    mode_post_switch(state->sw);
+  }
   rofi_view_update(state, TRUE);
 }
 

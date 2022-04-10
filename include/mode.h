@@ -241,6 +241,13 @@ char *mode_preprocess_input(Mode *mode, const char *input);
 /**
  * @param mode The mode to query
  *
+ * Callback after the switching into the mode.
+ */
+void mode_post_switch(Mode *mode);
+
+/**
+ * @param mode The mode to query
+ *
  * Query the mode for a user display.
  *
  * @return a new allocated (valid pango markup) message to display (user should

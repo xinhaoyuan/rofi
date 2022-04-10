@@ -176,4 +176,10 @@ char *mode_get_message(const Mode *mode) {
   }
   return NULL;
 }
+
+void mode_post_switch(Mode *mode) {
+  if (mode->_post_switch) {
+    mode->_post_switch(mode);
+  }
+}
 /**@}*/
